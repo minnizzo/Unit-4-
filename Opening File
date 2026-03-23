@@ -1,5 +1,9 @@
 hotdogs = []
 with open("Hotdogs.txt","r") as file:
-    data = file.read()
+   data = file.read()
+    #.read allows the code to output the data which is stored in Hotdogs.txt
 
 print("File content:\n" + data)
+#\n creates a new line between "File content:" and data
+
+
