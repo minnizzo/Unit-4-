@@ -1,9 +1,36 @@
 hotdogs = []
 with open("Hotdogs.txt","r") as file:
-   data = file.read()
+    data = file.read()
     #.read allows the code to output the data which is stored in Hotdogs.txt
+def data(Hotdogs.txt):
+    vendor_list = []
+    try:
+        hotdogs = open("Hotdogs.txt","r")
+        
+        for line in file:
+            strip = line.strip()
+            
+            columns = strip.split(",")
+            
+            if len(columns) == 7:
+                records = {
+                "id": columns[0],
+                "name": columns[1],
+                "date": columns[2],
+                "vegan": int(columns[3]),
+                "meat": int(columns[4])
+                "onions": float(columns[5]),
+                "ketchup": float(columns[6])
+            }
+            vendor_list.append(records)
+        file.close()
+        print("Loaded",vendor_list,"vendors.")
+        return vendor_list
+    
+    except FileNotFoundError:
+        print("Error detected: The file Hotdogs.txt was not found.")
+        return []
 
 print("File content:\n" + data)
 #\n creates a new line between "File content:" and data
-
 
