@@ -1,1 +1,23 @@
+#linear search (unsorted)
 
+def linearSearchUnsorted (data, search_name):
+    for i in range(len(data)):
+        #Checks if the name is in the list
+        if data[i]["name"].lower() == search_name.lower():
+            #
+            return i, data[i]
+    
+    return -1, None
+    #This is for the loop if it finishes without finding anything.
+
+#Test
+
+x = input("Enter vendor name to search for:")
+result = linearSearchUnsorted(vendor_list, x)
+
+if index != -1:
+    print (f"Vendor found at index {index}")
+    print (f"ID: {result['id']}, Ketchup: {result['ketchup']}")
+
+else:
+    print ("Vendor not found")
