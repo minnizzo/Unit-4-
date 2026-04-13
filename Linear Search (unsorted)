@@ -10,14 +10,3 @@ def linearSearchUnsorted (data, search_name):
     return -1, None
     #This is for the loop if it finishes without finding anything.
 
-#Test
-
-x = input("Enter vendor name to search for:")
-result = linearSearchUnsorted(vendor_list, x)
-
-if index != -1:
-    print (f"Vendor found at index {index}")
-    print (f"ID: {result['id']}, Ketchup: {result['ketchup']}")
-
-else:
-    print ("Vendor not found")
