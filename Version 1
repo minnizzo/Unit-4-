@@ -38,7 +38,7 @@ def linearSearchUnsorted (data, search_name):
             #
             return i, data[i]
     
-    return -1, None
+    return ("Error: Vendor name not found."), -1, None
     #This is for the loop if it finishes without finding anything.
 
 
