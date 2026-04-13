@@ -1,1 +1,11 @@
+def bubble_sort(data):
+    x = len(data)
+
+    for i in range(x):
+        for m in range(0,x - i - 1):
+
+            if data[m][1].lower() > data[m+1][1].lower():
+               data[m], data[m+1] = data [m+1], data[m]
+
+
 
