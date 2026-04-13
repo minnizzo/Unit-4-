@@ -1,0 +1,70 @@
+hotdogs = []
+with open("Hotdogs.txt","r") as file:
+    data = file.read()
+    #.read allows the code to output the data which is stored in Hotdogs.txt
+def data_loading(hotdogs_file):
+    vendor_list = []
+    try:
+        with open("Hotdogs.txt","r") as file:
+            for line in file:
+                columns = line.strip().split(",")
+                columns = [item.strip() for item in columns]
+            
+                if len(columns) == 7:
+                    records = {
+                    "id": columns[0],
+                    "name": columns[1],
+                    "date": columns[2],
+                    "vegan": int(columns[3]),
+                    "meat": int(columns[4]),
+                    "onions": float(columns[5]),
+                    "ketchup": float(columns[6])
+                }
+                vendor_list.append(records)
+        print("Loaded", len(vendor_list),"vendors.")
+        return vendor_list
+    
+    except FileNotFoundError:
+        print("Error detected: The file Hotdogs.txt was not found.")
+        return []
+
+
+#linear search (unsorted)
+
+def linearSearchUnsorted (data, search_name):
+    for i in range(len(data)):
+        #Checks if the name is in the list
+        if data[i]["name"].lower() == search_name.lower():
+            #
+            return i, data[i]
+    
+    return -1, None
+    #This is for the loop if it finishes without finding anything.
+
+
+def bubble_sort(data):
+    x = len(data)
+
+    for i in range(x):
+        for m in range(0,x - i - 1):
+
+            if data[m]["name"].lower() > data[m+1]["name"].lower():
+               data[m], data[m+1] = data [m+1], data[m]
+
+vendor_list = data_loading("Hotdogs.txt")
+
+if vendor_list:
+    x = input("Enter vendor name to search for:")
+    index, result = linearSearchUnsorted(vendor_list, x)
+
+    if index != -1:
+        print(f"\nMatch found.")
+        print(f"Index: {index}")
+        print(f"ID: {result['id']}")
+        print(f"Name: {result['name']}")
+        print(f"Meat: {result['meat']}")
+        print(f"Ketchup: {result['ketchup']}")
+    else:
+        print("Vendor not found in the list")
+
+
