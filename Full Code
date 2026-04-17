@@ -28,6 +28,7 @@ def data_loading(hotdogs_file):
         print("Error detected: The file Hotdogs.txt was not found.")
         return []
 
+
 def quick_sort(data_list):
     if len(data_list) <= 1:
         return data_list
@@ -37,6 +38,16 @@ def quick_sort(data_list):
     left = [x for x in data_list[1:] if x['name'].lower()< pivot['name'].lower()]
     right = [x for x in data_list[1:] if x['name'].lower() >= pivot['name'].lower()]
     return quick_sort(left) + [pivot] + quick_sort(right)
+
+def bubble_sort(data):
+    x = len(data)
+
+    for i in range(x):
+        for m in range(0,x - i - 1):
+
+            if data[m]["name"].lower() > data[m+1]["name"].lower():
+               data[m], data[m+1] = data [m+1], data[m]
+
 
 #linear search (unsorted)
 
@@ -50,30 +61,40 @@ def linearSearchUnsorted (data, search_name):
     return -1, None
     #This is for the loop if it finishes without finding anything.
 
+def linearSearchSorted(data, search_name):
+    search_name = search_name.strip().lower()
+    matches = []
+    for i in range(len(data)):
+        name1 = data[i]["name"].lower()
+        if name1 == search_name:
+            matches.append(data[i])
+        elif name1 > search_name:
+            break
+        return matches
 
-def bubble_sort(data):
-    x = len(data)
 
-    for i in range(x):
-        for m in range(0,x - i - 1):
-
-            if data[m]["name"].lower() > data[m+1]["name"].lower():
-               data[m], data[m+1] = data [m+1], data[m]
 
 vendor_list = data_loading("Hotdogs.txt")
 
-
 if vendor_list:
-    x = input("Enter vendor name to search for:")
+    vendor_list = quick_sort(vendor_list)
+    print("List sorted alphabetically by quick sort.")
+    
+    x = input("\nEnter vendor name to search for: ")
     index, result = linearSearchUnsorted(vendor_list, x)
 
-    if index != -1:
-        print(f"\nMatch found.")
-        print(f"Index: {index}")
-        print(f"ID: {result['id']}")
-        print(f"Name: {result['name']}")
-        print(f"Meat: {result['meat']}")
-        print(f"Ketchup: {result['ketchup']}")
+    output = linearSearchSorted(vendor_list,x)
+
+    if output:
+        print (f"Found {len(result)} matches: ")
+        for l in output:
+            print(f"\nMatch found.")
+            print(f"Index: {index}")
+            print(f"ID: {result['id']}")
+            print(f"Name: {result['name']}")
+            print(f"Meat: {result['meat']}")
+            print(f"Ketchup: {result['ketchup']}")
     else:
         print("Vendor not found in the list")
+
 
