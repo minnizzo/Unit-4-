@@ -48,6 +48,21 @@ def bubble_sort(data):
             if data[m]["name"].lower() > data[m+1]["name"].lower():
                data[m], data[m+1] = data [m+1], data[m]
 
+def binarySearch(data_list, x):
+    low = 0
+    high = len(data_list) - 1
+    while low <= high:
+        mid = low + (high - low) // 2
+        if data_list[mid] == x:
+            return mid
+        elif data_list[mid] < x:
+            low = mid + 1
+        else:
+            high = mid - 1
+            
+    return -1
+
+
 
 #linear search (unsorted)
 
