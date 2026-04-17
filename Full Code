@@ -1,6 +1,6 @@
 hotdogs = []
-with open("Hotdogs.txt","r") as file:
-    data = file.read()
+#with open("Hotdogs.txt","r") as file:
+    #data = file.read()
     #.read allows the code to output the data which is stored in Hotdogs.txt
 def data_loading(hotdogs_file):
     vendor_list = []
@@ -18,7 +18,7 @@ def data_loading(hotdogs_file):
                     "vegan": int(columns[3]),
                     "meat": int(columns[4]),
                     "onions": float(columns[5]),
-                    "ketchup": int(columns[6])
+                    "ketchup": float(columns[6])
                 }
                 vendor_list.append(records)
         print("Loaded", len(vendor_list),"vendors.")
@@ -28,6 +28,15 @@ def data_loading(hotdogs_file):
         print("Error detected: The file Hotdogs.txt was not found.")
         return []
 
+def quick_sort(data_list):
+    if len(data_list) <= 1:
+        return data_list
+    
+    pivot = data_list[0]
+    
+    left = [x for x in data_list[1:] if x['name'].lower()< pivot['name'].lower()]
+    right = [x for x in data_list[1:] if x['name'].lower() >= pivot['name'].lower()]
+    return quick_sort(left) + [pivot] + quick_sort(right)
 
 #linear search (unsorted)
 
@@ -38,7 +47,7 @@ def linearSearchUnsorted (data, search_name):
             #
             return i, data[i]
     
-    return ("Error: Vendor name not found."), -1, None
+    return -1, None
     #This is for the loop if it finishes without finding anything.
 
 
@@ -53,6 +62,7 @@ def bubble_sort(data):
 
 vendor_list = data_loading("Hotdogs.txt")
 
+
 if vendor_list:
     x = input("Enter vendor name to search for:")
     index, result = linearSearchUnsorted(vendor_list, x)
@@ -66,5 +76,4 @@ if vendor_list:
         print(f"Ketchup: {result['ketchup']}")
     else:
         print("Vendor not found in the list")
-
 
