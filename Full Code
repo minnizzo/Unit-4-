@@ -18,7 +18,7 @@ def data_loading(hotdogs_file):
                     "vegan": int(columns[3]),
                     "meat": int(columns[4]),
                     "onions": float(columns[5]),
-                    "ketchup": float(columns[6])
+                    "ketchup": int(columns[6])
                 }
                 vendor_list.append(records)
         print("Loaded", len(vendor_list),"vendors.")
