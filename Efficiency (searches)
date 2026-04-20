@@ -1,1 +1,21 @@
+import time
+
+if vendor_list:
+    #comparing the sorts
+    bubble_data = vendor_list[:]
+    quick_data = vendor_list[:]
+
+    #Bubble Sort
+    begin = time.perf_counter()
+    bubble_sort(bubble_data)
+    bubble_time = time.perf_counter() - begin
+
+    #Quick Sort
+    begin = time.perf_counter()
+    quick_sort(quick_data)
+    quick_time = time.perf_counter() - begin
+
+    print(f"Bubble Sort: {bubble_time:.6f} seconds.")
+    print(f"Quick Sort: {quick_time:.6f} seconds.")
+
 
