@@ -4,6 +4,9 @@ hotdogs = []
 #with open("Hotdogs.txt","r") as file:
     #data = file.read()
     #.read allows the code to output the data which is stored in Hotdogs.txt
+
+
+
 def data_loading(hotdogs_file):
     vendor_list = []
     try:
@@ -91,7 +94,7 @@ def linearSearchSorted(data, search_name):
             matches.append(data[i])
         elif name1 > search_name:
             break
-        return matches
+    return matches
 
 
 
@@ -109,7 +112,7 @@ if vendor_list:
 
     #Quick Sort
     begin = time.perf_counter()
-    quick_sort(quick_data)
+    quick_data = quick_sort(quick_data)
     quick_time = time.perf_counter() - begin
 
     print(f"Bubble Sort: {bubble_time:.6f} seconds.")
@@ -118,20 +121,26 @@ if vendor_list:
     #Comparing searches
     target = input("Enter vendor name to search for: ")
 
-    #Linear Search
+    #Linear Search(Unsorted)
     begin = time.perf_counter()
     linearSearchUnsorted(vendor_list, target)
     timeA = time.perf_counter() - begin
 
+    #Linear Search (Sorted)
+    begin = time.perf_counter()
+    linearSearchSorted(quick_data, target)
+    timeB = time.perf_counter() - begin
+
     #Binary Search
     begin = time.perf_counter()
-    binarySearch(sorted_list, target)
-    timeB = time.perf_counter() - begin
+    binarySearch(quick_data, target)
+    timeC = time.perf_counter() - begin
 
     print("Search Efficiency")
     print("-----------------")
-    print(f"Linear search: {timeA:.6f} seconds.")
-    print(f"Binary search: {timeB:.6f} seconds.")
+    print(f"Linear search (unsorted): {timeA:.6f} seconds.")
+    print(f"Linear search (sorted): {timeB:.6f} seconds.")
+    print(f"Binary search: {timeC:.6f} seconds.")
 
     
     
