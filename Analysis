@@ -1,1 +1,22 @@
+def analysing_data(data):
+    most = data[0]
+    least_ketchup_used = data[0]
+    total_vegan = 0
+    total_meat = 0
 
+    for b in data:
+        if b["vegan"] + b["meat"] > most["vegan"] + most["meat"]:
+            most = b
+        if b["ketchup"] < least_ketchup_used["ketchup"]:
+            least_ketchup_used = b
+
+        total_vegan += b["vegan"]
+        total_meat += b["meat"]
+
+    print("Analysis")
+    print("--------")
+    print("")
+    print("Most productive:", most["name"])
+    print("Total vegan:", total_vegan)
+    print("Total meat:", total_meat)
+    print("Least ketchup:", least_ketchup["name"])
