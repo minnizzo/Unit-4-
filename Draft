@@ -1,3 +1,5 @@
+import time
+
 hotdogs = []
 #with open("Hotdogs.txt","r") as file:
     #data = file.read()
@@ -51,11 +53,15 @@ def bubble_sort(data):
 def binarySearch(data_list, x):
     low = 0
     high = len(data_list) - 1
+    x = x.lower()
+    
     while low <= high:
         mid = low + (high - low) // 2
-        if data_list[mid] == x:
+        current_name = data_list[mid]["name"].lower()
+        
+        if current_name == x:
             return mid
-        elif data_list[mid] < x:
+        elif current_name < x:
             low = mid + 1
         else:
             high = mid - 1
@@ -92,24 +98,63 @@ def linearSearchSorted(data, search_name):
 vendor_list = data_loading("Hotdogs.txt")
 
 if vendor_list:
-    vendor_list = quick_sort(vendor_list)
-    print("List sorted alphabetically by quick sort.")
+    #comparing the sorts
+    bubble_data = vendor_list[:]
+    quick_data = vendor_list[:]
+
+    #Bubble Sort
+    begin = time.perf_counter()
+    bubble_sort(bubble_data)
+    bubble_time = time.perf_counter() - begin
+
+    #Quick Sort
+    begin = time.perf_counter()
+    quick_sort(quick_data)
+    quick_time = time.perf_counter() - begin
+
+    print(f"Bubble Sort: {bubble_time:.6f} seconds.")
+    print(f"Quick Sort: {quick_time:.6f} seconds.")
+
+    #Comparing searches
+    target = input("Enter vendor name to search for: ")
+
+    #Linear Search
+    begin = time.perf_counter()
+    linearSearchUnsorted(vendor_list, target)
+    timeA = time.perf_counter() - begin
+
+    #Binary Search
+    begin = time.perf_counter()
+    binarySearch(sorted_list, target)
+    timeB = time.perf_counter() - begin
+
+    print("Search Efficiency")
+    print("-----------------")
+    print(f"Linear search: {timeA:.6f} seconds.")
+    print(f"Binary search: {timeB:.6f} seconds.")
+
     
-    x = input("\nEnter vendor name to search for: ")
-    index, result = linearSearchUnsorted(vendor_list, x)
+    
 
-    output = linearSearchSorted(vendor_list,x)
-
-    if output:
-        print (f"Found {len(result)} matches: ")
-        for l in output:
-            print(f"\nMatch found.")
-            print(f"Index: {index}")
-            print(f"ID: {result['id']}")
-            print(f"Name: {result['name']}")
-            print(f"Meat: {result['meat']}")
-            print(f"Ketchup: {result['ketchup']}")
-    else:
-        print("Vendor not found in the list")
+##if vendor_list:
+##    vendor_list = quick_sort(vendor_list)
+##    print("List sorted alphabetically by quick sort.")
+##    
+##    x = input("\nEnter vendor name to search for: ")
+##    index, result = linearSearchUnsorted(vendor_list, x)
+##
+##    output = linearSearchSorted(vendor_list,x)
+##
+##    if output:
+##        print (f"Found {len(result)} matches: ")
+##        for l in output:
+##            print(f"\nMatch found.")
+##            print(f"Index: {index}")
+##            print(f"ID: {result['id']}")
+##            print(f"Name: {result['name']}")
+##            print(f"Meat: {result['meat']}")
+##            print(f"Ketchup: {result['ketchup']}")
+##    else:
+##        print("Vendor not found in the list")
 
 
