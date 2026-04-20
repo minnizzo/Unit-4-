@@ -96,8 +96,30 @@ def linearSearchSorted(data, search_name):
             break
     return matches
 
+def analysing_data(data):
+    most = data[0]
+    least_ketchup_used = data[0]
+    total_vegan = 0
+    total_meat = 0
 
+    for b in data:
+        if b["vegan"] + b["meat"] > most["vegan"] + most["meat"]:
+            most = b
+        if b["ketchup"] < least_ketchup_used["ketchup"]:
+            least_ketchup_used = b
 
+        total_vegan += v["vegan"]
+        total_meat += v["meat"]
+
+    print("Analysis")
+    print("--------")
+    print("")
+    print("Most productive:", most["name"])
+    print("Total vegan:", total_vegan)
+    print("Total meat:", total_meat)
+    print("Least ketchup:", least_ketchup["name"])
+
+    
 vendor_list = data_loading("Hotdogs.txt")
 
 if vendor_list:
@@ -143,27 +165,24 @@ if vendor_list:
     print(f"Binary search: {timeC:.6f} seconds.")
 
     
+if vendor_list:
+    vendor_list = quick_sort(vendor_list)
+    print("List sorted alphabetically by quick sort.")
     
+    x = input("\nEnter vendor name to search for: ")
+    index, result = linearSearchUnsorted(vendor_list, x)
 
-##if vendor_list:
-##    vendor_list = quick_sort(vendor_list)
-##    print("List sorted alphabetically by quick sort.")
-##    
-##    x = input("\nEnter vendor name to search for: ")
-##    index, result = linearSearchUnsorted(vendor_list, x)
-##
-##    output = linearSearchSorted(vendor_list,x)
-##
-##    if output:
-##        print (f"Found {len(result)} matches: ")
-##        for l in output:
-##            print(f"\nMatch found.")
-##            print(f"Index: {index}")
-##            print(f"ID: {result['id']}")
-##            print(f"Name: {result['name']}")
-##            print(f"Meat: {result['meat']}")
-##            print(f"Ketchup: {result['ketchup']}")
-##    else:
-##        print("Vendor not found in the list")
+    output = linearSearchSorted(vendor_list,x)
 
+    if output:
+        print (f"Found {len(result)} matches: ")
+        for l in output:
+            print(f"\nMatch found.")
+            print(f"Index: {index}")
+            print(f"ID: {result['id']}")
+            print(f"Name: {result['name']}")
+            print(f"Meat: {result['meat']}")
+            print(f"Ketchup: {result['ketchup']}")
+    else:
+        print("Vendor not found in the list")
 
