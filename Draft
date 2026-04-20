@@ -5,6 +5,39 @@ hotdogs = []
     #data = file.read()
     #.read allows the code to output the data which is stored in Hotdogs.txt
 
+def validation(columns):
+    try:
+        vendor_id = columns[0]
+        name = columns[1]
+        date = columns[2]
+        vegan = int(columns[3])
+        meat = int(columns[4])
+        onions = float(columns[5])
+        ketchup = int(columns[6])
+
+        #ID format
+        if not (len(vendor_id) == 6 and vendor_id[:2].isupper() and vendor_id[2] == "_" and vendor_id[3:].isdigit()):
+            return False
+        #Name length
+        if not(2 <= len(name) <= 25):
+            return False
+        #Date format + week
+        if not(len(date) == 6 and date.isdigit()):
+            return False
+        #Multiples of 10
+        if vegan % 10 != 0 or meat % 10 != 0:
+            return False
+        #Onions
+        if onions * 2 != int(onions * 2):
+            return False
+        #Ketchup
+        if not (1 <= ketchup <= 4):
+            return False
+
+        return True
+    except:
+        return False
+        
 
 
 def data_loading(hotdogs_file):
@@ -15,23 +48,35 @@ def data_loading(hotdogs_file):
                 columns = line.strip().split(",")
                 columns = [item.strip() for item in columns]
             
-                if len(columns) == 7:
-                    records = {
-                    "id": columns[0],
-                    "name": columns[1],
-                    "date": columns[2],
-                    "vegan": int(columns[3]),
-                    "meat": int(columns[4]),
-                    "onions": float(columns[5]),
-                    "ketchup": int(columns[6])
-                }
-                vendor_list.append(records)
+                if len(columns) == 7 and validation(columns):
+                    try:
+                        records = {
+                            "id": columns[0],
+                            "name": columns[1],
+                            "date": columns[2],
+                            "vegan": int(columns[3]),
+                            "meat": int(columns[4]),
+                            "onions": float(columns[5]),
+                            "ketchup": int(columns[6])
+                        
+                        }
+                        vendor_list.append(records)
         print("Loaded", len(vendor_list),"vendors.")
         return vendor_list
     
     except FileNotFoundError:
         print("Error detected: The file Hotdogs.txt was not found.")
         return []
+
+def save_result(data):
+    with open("analysis.txt","w") as file:
+        file.write("Hotdog Vendor Analysis")
+        file.write("----------------------")
+        file.write(f"Most productive {data['most']['name']}\n")
+        file.write(f"Total vegan: {data['vegan']}\n")
+        file.write(f"Total meat: {data['meat']}\n")
+        file.write(f"Least ketchup: {data['least']['name']}\n")
+    print("Results saved to 'analysis.txt'")
 
 
 def quick_sort(data_list):
@@ -108,8 +153,8 @@ def analysing_data(data):
         if b["ketchup"] < least_ketchup_used["ketchup"]:
             least_ketchup_used = b
 
-        total_vegan += v["vegan"]
-        total_meat += v["meat"]
+        total_vegan += b["vegan"]
+        total_meat += b["meat"]
 
     print("Analysis")
     print("--------")
@@ -164,25 +209,28 @@ if vendor_list:
     print(f"Linear search (sorted): {timeB:.6f} seconds.")
     print(f"Binary search: {timeC:.6f} seconds.")
 
-    
-if vendor_list:
-    vendor_list = quick_sort(vendor_list)
-    print("List sorted alphabetically by quick sort.")
-    
-    x = input("\nEnter vendor name to search for: ")
-    index, result = linearSearchUnsorted(vendor_list, x)
+analysing_data(vendor_list)
 
-    output = linearSearchSorted(vendor_list,x)
-
-    if output:
-        print (f"Found {len(result)} matches: ")
-        for l in output:
-            print(f"\nMatch found.")
-            print(f"Index: {index}")
-            print(f"ID: {result['id']}")
-            print(f"Name: {result['name']}")
-            print(f"Meat: {result['meat']}")
-            print(f"Ketchup: {result['ketchup']}")
-    else:
-        print("Vendor not found in the list")
+    
+##if vendor_list:
+##    vendor_list = quick_sort(vendor_list)
+##    print("List sorted alphabetically by quick sort.")
+##    
+##    x = input("\nEnter vendor name to search for: ")
+##    index, result = linearSearchUnsorted(vendor_list, x)
+##
+##    output = linearSearchSorted(vendor_list,x)
+##
+##    if output:
+##        print (f"Found {len(output)} matches: ")
+##        for l in output:
+##            print(f"\nMatch found.")
+##            print(f"Index: {index}")
+##            print(f"ID: {l['id']}")
+##            print(f"Name: {l['name']}")
+##            print(f"Meat: {l['meat']}")
+##            print(f"Ketchup: {l['ketchup']}")
+##    else:
+##        print("Vendor not found in the list")
+##
 
