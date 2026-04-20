@@ -15,5 +15,5 @@ import time
     print("Search Efficiency")
     print("-----------------")
     print(f"Linear search: {timeA:.6f} seconds.")
-    print(f"Binary search: {timeB.:6f} seconds.")
+    print(f"Binary search: {timeB:.6f} seconds.")
 
