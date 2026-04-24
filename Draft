@@ -61,10 +61,10 @@ def data_loading(hotdogs_file):
                         
                         }
                         vendor_list.append(records)
+                    except:
+                        print("Invalid record.",columns)
                 else:
-                    print("Invalid record.",columns)
-##        print("Loaded", len(vendor_list),"vendors.")
-##        return vendor_list
+                    print("Invalid record",columns)
     
     except FileNotFoundError:
         print("Error detected: The file Hotdogs.txt was not found.")
@@ -164,7 +164,7 @@ def analysing_data(data):
     print("Most productive:", most["name"])
     print("Total vegan:", total_vegan)
     print("Total meat:", total_meat)
-    print("Least ketchup:", least_ketchup["name"])
+    print("Least ketchup:", least_ketchup_used["name"])
 
     return {
         "most": most,
@@ -232,7 +232,7 @@ if vendor_list:
 
         elif user_choice == "3":
             results = analysing_data(vendor_list)
-            save_results(results)
+            save_result(results)
 
         elif user_choice == "4":
             print("Exiting the program")
@@ -264,4 +264,3 @@ if vendor_list:
 ##    else:
 ##        print("Vendor not found in the list")
 ##
-
