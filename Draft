@@ -28,7 +28,7 @@ def validation(columns):
         if vegan % 10 != 0 or meat % 10 != 0:
             return False
         #Onions
-        if onions * 2 != int(onions * 2):
+        if (onions * 2) % 1 != 0:
             return False
         #Ketchup
         if not (1 <= ketchup <= 4):
@@ -75,8 +75,8 @@ def data_loading(hotdogs_file):
 
 def save_result(data):
     with open("analysis.txt","w") as file:
-        file.write("Hotdog Vendor Analysis")
-        file.write("----------------------")
+        file.write("Hotdog Vendor Analysis\n")
+        file.write("----------------------\n")
         file.write(f"Most productive {data['most']['name']}\n")
         file.write(f"Total vegan: {data['vegan']}\n")
         file.write(f"Total meat: {data['meat']}\n")
@@ -224,7 +224,7 @@ if vendor_list:
 
             #Binary Search
             begin = time.perf_counter()
-            binarySearch(quick_data, target)
+            index = binarySearch(quick_data, target)
             timeC = time.perf_counter() - begin
 
             print("Search Efficiency")
@@ -232,6 +232,8 @@ if vendor_list:
             print(f"Linear search (unsorted): {timeA:.6f} seconds.")
             print(f"Linear search (sorted): {timeB:.6f} seconds.")
             print(f"Binary search: {timeC:.6f} seconds.")
+            if timeC < timeA and timeC < timeB:
+                print("Binary search is the fastest search.")
 
         elif user_choice == "3":
             results = analysing_data(vendor_list)
@@ -267,3 +269,4 @@ if vendor_list:
 ##    else:
 ##        print("Vendor not found in the list")
 ##
+
