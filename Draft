@@ -58,17 +58,20 @@ def data_loading(hotdogs_file):
                             "meat": int(columns[4]),
                             "onions": float(columns[5]),
                             "ketchup": int(columns[6])
-                        
                         }
                         vendor_list.append(records)
                     except:
                         print("Invalid record.",columns)
                 else:
                     print("Invalid record",columns)
-    
+            
+            print("Loaded", len(vendor_list), "vendors.")
+            return vendor_list
+        
     except FileNotFoundError:
-        print("Error detected: The file Hotdogs.txt was not found.")
+        print("Error: 'Hotdogs.txt' not found")
         return []
+    
 
 def save_result(data):
     with open("analysis.txt","w") as file:
