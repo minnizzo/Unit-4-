@@ -43,7 +43,7 @@ def validation(columns):
 def data_loading(hotdogs_file):
     vendor_list = []
     try:
-        with open("Hotdogs.txt","r") as file:
+        with open(hotdogs_file,"r") as file:
             for line in file:
                 columns = line.strip().split(",")
                 columns = [item.strip() for item in columns]
