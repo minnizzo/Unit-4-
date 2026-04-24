@@ -61,8 +61,10 @@ def data_loading(hotdogs_file):
                         
                         }
                         vendor_list.append(records)
-        print("Loaded", len(vendor_list),"vendors.")
-        return vendor_list
+                else:
+                    print("Invalid record.",columns)
+##        print("Loaded", len(vendor_list),"vendors.")
+##        return vendor_list
     
     except FileNotFoundError:
         print("Error detected: The file Hotdogs.txt was not found.")
@@ -164,52 +166,81 @@ def analysing_data(data):
     print("Total meat:", total_meat)
     print("Least ketchup:", least_ketchup["name"])
 
+    return {
+        "most": most,
+        "vegan": total_vegan,
+        "meat": total_meat,
+        "least": least_ketchup_used
+        }
+
     
 vendor_list = data_loading("Hotdogs.txt")
 
 if vendor_list:
-    #comparing the sorts
-    bubble_data = vendor_list[:]
-    quick_data = vendor_list[:]
+    while True:
+        print("Menu")
+        print("----")
+        print("1. Sort and compare")
+        print("2. Search for a vendor")
+        print("3. Analyse")
+        print("4. Exit")
 
-    #Bubble Sort
-    begin = time.perf_counter()
-    bubble_sort(bubble_data)
-    bubble_time = time.perf_counter() - begin
+        user_choice = input("Choose a option: ")
 
-    #Quick Sort
-    begin = time.perf_counter()
-    quick_data = quick_sort(quick_data)
-    quick_time = time.perf_counter() - begin
+        if user_choice == "1":
+            #comparing the sorts
+            bubble_data = vendor_list[:]
+            quick_data = vendor_list[:]
 
-    print(f"Bubble Sort: {bubble_time:.6f} seconds.")
-    print(f"Quick Sort: {quick_time:.6f} seconds.")
+            #Bubble Sort
+            begin = time.perf_counter()
+            bubble_sort(bubble_data)
+            bubble_time = time.perf_counter() - begin
 
-    #Comparing searches
-    target = input("Enter vendor name to search for: ")
+            #Quick Sort
+            begin = time.perf_counter()
+            quick_data = quick_sort(quick_data)
+            quick_time = time.perf_counter() - begin
 
-    #Linear Search(Unsorted)
-    begin = time.perf_counter()
-    linearSearchUnsorted(vendor_list, target)
-    timeA = time.perf_counter() - begin
+            print(f"Bubble Sort: {bubble_time:.6f} seconds.")
+            print(f"Quick Sort: {quick_time:.6f} seconds.")
 
-    #Linear Search (Sorted)
-    begin = time.perf_counter()
-    linearSearchSorted(quick_data, target)
-    timeB = time.perf_counter() - begin
+        elif user_choice == "2":
+            #Comparing searches
+            target = input("Enter vendor name to search for: ")
 
-    #Binary Search
-    begin = time.perf_counter()
-    binarySearch(quick_data, target)
-    timeC = time.perf_counter() - begin
+            #Linear Search(Unsorted)
+            begin = time.perf_counter()
+            linearSearchUnsorted(vendor_list, target)
+            timeA = time.perf_counter() - begin
 
-    print("Search Efficiency")
-    print("-----------------")
-    print(f"Linear search (unsorted): {timeA:.6f} seconds.")
-    print(f"Linear search (sorted): {timeB:.6f} seconds.")
-    print(f"Binary search: {timeC:.6f} seconds.")
+            #Linear Search (Sorted)
+            begin = time.perf_counter()
+            linearSearchSorted(quick_data, target)
+            timeB = time.perf_counter() - begin
 
-analysing_data(vendor_list)
+            #Binary Search
+            begin = time.perf_counter()
+            binarySearch(quick_data, target)
+            timeC = time.perf_counter() - begin
+
+            print("Search Efficiency")
+            print("-----------------")
+            print(f"Linear search (unsorted): {timeA:.6f} seconds.")
+            print(f"Linear search (sorted): {timeB:.6f} seconds.")
+            print(f"Binary search: {timeC:.6f} seconds.")
+
+        elif user_choice == "3":
+            results = analysing_data(vendor_list)
+            save_results(results)
+
+        elif user_choice == "4":
+            print("Exiting the program")
+            break
+        else:
+            print("Invalid option, try again.")
+
+
 
     
 ##if vendor_list:
