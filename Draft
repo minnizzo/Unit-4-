@@ -116,13 +116,13 @@ def edit_vendor_info(data):
         if new_onions != "":
             vendor["onions"] = float(new_onions)
         if new_ketchup != "":
-            vendor["ketchup" = int(new_ketchup)
+            vendor["ketchup"] = int(new_ketchup)
     except:
         print("Invalid input. Changes have been cancelled")
         return
 
     check = [
-        vendor{"id"],
+        vendor["id"],
         vendor["name"],
         vendor["date"],
         str(vendor["vegan"]),
@@ -138,14 +138,13 @@ def edit_vendor_info(data):
         print("Update rejected (data failed validation. No changes saved.")
 
 def save_file(data, file_name = "Hotdogs.txt"):
-    with open(filename, "w") as file:
+    with open(file_name, "w") as file:
         for o in data:
             line = (
-                f"{v['id']},{v['name']},{v['date']}"
-                f"{v['vegan']},{v['meat']},{v['onions']},{v['ketchup']}\n"
+                f"{o['id']},{o['name']},{o['date']}"
+                f"{o['vegan']},{o['meat']},{o['onions']},{o['ketchup']}\n"
                 )
             file.write(line)
-
     print("Data saved to file.")
     
 
@@ -315,7 +314,7 @@ if vendor_list:
             edit_vendor_info(vendor_list)
 
         elif user_choice == "6":
-            save_info(vendor_list)
+            save_file(vendor_list)
             
         else:
             print("Invalid option, try again.")
@@ -344,5 +343,4 @@ if vendor_list:
 ##    else:
 ##        print("Vendor not found in the list")
 ##
-
 
