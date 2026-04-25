@@ -86,19 +86,36 @@ def save_result(data):
 def edit_vendor_info(data):
     name = input("Enter vendor name to edit : ")
 
-    found = None
+    matches = []
     for i in range(len(data)):
         if data[i]["name"].lower() == name:
-            found = i
-            break
-
-    if found is None:
+            matches.append(i)
+            
+    if not matches:
         print("Error: Vendor not found.")
         return
 
+    if len(matches) > 1:
+        print(f"Multiple records found for '{data[matches[0]]['name']}':")
+
+        count = 1
+        for index in matches:
+            record = data[index]
+            print(str(count) + ". Date: " + record['date'] + " Meat: " + str(record['meat']))
+            count = count + 1
+
+            try:
+                choice = int(input("Enter the number of the record you want to edit: "))
+                found = matches[choice - 1]
+            except:
+                print("Invalid selection.")
+                return
+    else:
+        found = matches[0]
+    
     vendor = data[found]
 
-    print("Current details")
+    print("\nCurrent details")
     print("---------------")
     print(vendor)
     print("Enter new information (Press ENTER to keep the information the same")
@@ -107,6 +124,9 @@ def edit_vendor_info(data):
     new_meat = input("Meat hotdogs: ")
     new_onions = input("Onions (kg): ")
     new_ketchup = input("Ketchup (litres): ")
+
+    temp_vendor = vendor.copy()
+    
 
     try:
         if new_vegan != "":
@@ -122,27 +142,26 @@ def edit_vendor_info(data):
         return
 
     check = [
-        vendor["id"],
-        vendor["name"],
-        vendor["date"],
-        str(vendor["vegan"]),
-        str(vendor["meat"]),
-        str(vendor["onions"]),
-        str(vendor["ketchup"]),
+        temp_vendor["id"],
+        temp_vendor["name"],
+        temp_vendor["date"],
+        str(temp_vendor["vegan"]),
+        str(temp_vendor["meat"]),
+        str(temp_vendor["onions"]),
+        str(temp_vendor["ketchup"]),
         ]
 
     if validation(check):
         print("Update successful.")
-        data[found] = vendor
+        data[found] = temp_vendor
     else:
-        print("Update rejected (data failed validation. No changes saved.")
+        print("Update rejected (data failed validation.) No changes saved.")
 
 def save_file(data, file_name = "Hotdogs.txt"):
     with open(file_name, "w") as file:
         for o in data:
             line = (
-                f"{o['id']},{o['name']},{o['date']}"
-                f"{o['vegan']},{o['meat']},{o['onions']},{o['ketchup']}\n"
+                f"{o['id']},{o['name']},{o['date']},{o['vegan']},{o['meat']},{o['onions']},{o['ketchup']}\n"
                 )
             file.write(line)
     print("Data saved to file.")
@@ -226,8 +245,8 @@ def analysing_data(data):
         total_vegan += b["vegan"]
         total_meat += b["meat"]
 
-    print("Analysis")
-    print("--------")
+    print("Analysis\n")
+    print("--------\n")
     print("")
     print("Most productive:", most["name"])
     print("Total vegan:", total_vegan)
@@ -343,4 +362,3 @@ if vendor_list:
 ##    else:
 ##        print("Vendor not found in the list")
 ##
-
