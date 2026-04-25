@@ -75,8 +75,8 @@ def data_loading(hotdogs_file):
 
 def save_result(data):
     with open("analysis.txt","w") as file:
-        file.write("Hotdog Vendor Analysis")
-        file.write("----------------------")
+        file.write("Hotdog Vendor Analysis\n")
+        file.write("----------------------\n")
         file.write(f"Most productive {data['most']['name']}\n")
         file.write(f"Total vegan: {data['vegan']}\n")
         file.write(f"Total meat: {data['meat']}\n")
@@ -130,13 +130,13 @@ def edit_vendor_info(data):
 
     try:
         if new_vegan != "":
-            vendor["vegan"] = int(new_vegan)
+            temp_vendor["vegan"] = int(new_vegan)
         if new_meat != "":
-            vendor["meat"] = int(new_meat)
+            temp_vendor["meat"] = int(new_meat)
         if new_onions != "":
-            vendor["onions"] = float(new_onions)
+            temp_vendor["onions"] = float(new_onions)
         if new_ketchup != "":
-            vendor["ketchup"] = int(new_ketchup)
+            temp_vendor["ketchup"] = int(new_ketchup)
     except:
         print("Invalid input. Changes have been cancelled")
         return
@@ -362,3 +362,4 @@ if vendor_list:
 ##    else:
 ##        print("Vendor not found in the list")
 ##
+
