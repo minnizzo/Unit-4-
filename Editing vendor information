@@ -1,1 +1,55 @@
+def edit_vendor_info(data):
+    name = input("Enter vendor name to edit : ")
+
+    found = None
+    for i in range(len(data)):
+        if data[i]["name"].lower() == name:
+            found = i
+            break
+
+    if found is None:
+        print("Error: Vendor not found.")
+        return
+
+    vendor = data[found]
+
+    print("Current details")
+    print("---------------")
+    print(vendor)
+    print("Enter new information (Press ENTER to keep the information the same")
+
+    new_vegan = input("Vegan hotdogs: ")
+    new_meat = input("Meat hotdogs: ")
+    new_onions = input("Onions (kg): ")
+    new_ketchup = input("Ketchup (litres): ")
+
+    try:
+        if new_vegan != "":
+            vendor["vegan"] = int(new_vegan)
+        if new_meat != "":
+            vendor["meat"] = int(new_meat)
+        if new_onions != "":
+            vendor["onions"] = float(new_onions)
+        if new_ketchup != "":
+            vendor["ketchup" = int(new_ketchup)
+    except:
+        print("Invalid input. Changes have been cancelled")
+        return
+
+    check = [
+        vendor{"id"],
+        vendor["name"],
+        vendor["date"],
+        str(vendor["vegan"]),
+        str(vendor["meat"]),
+        str(vendor["onions"]),
+        str(vendor["ketchup"]),
+        ]
+
+    if validation(check):
+        print("Update successful.")
+        data[found] = vendor
+    else:
+        print("Update rejected (data failed validation. No changes saved.")
+
 
