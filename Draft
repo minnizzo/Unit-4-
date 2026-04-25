@@ -28,7 +28,7 @@ def validation(columns):
         if vegan % 10 != 0 or meat % 10 != 0:
             return False
         #Onions
-        if (onions * 2) % 1 != 0:
+        if onions * 2 != int(onions * 2):
             return False
         #Ketchup
         if not (1 <= ketchup <= 4):
@@ -75,13 +75,79 @@ def data_loading(hotdogs_file):
 
 def save_result(data):
     with open("analysis.txt","w") as file:
-        file.write("Hotdog Vendor Analysis\n")
-        file.write("----------------------\n")
+        file.write("Hotdog Vendor Analysis")
+        file.write("----------------------")
         file.write(f"Most productive {data['most']['name']}\n")
         file.write(f"Total vegan: {data['vegan']}\n")
         file.write(f"Total meat: {data['meat']}\n")
         file.write(f"Least ketchup: {data['least']['name']}\n")
     print("Results saved to 'analysis.txt'")
+
+def edit_vendor_info(data):
+    name = input("Enter vendor name to edit : ")
+
+    found = None
+    for i in range(len(data)):
+        if data[i]["name"].lower() == name:
+            found = i
+            break
+
+    if found is None:
+        print("Error: Vendor not found.")
+        return
+
+    vendor = data[found]
+
+    print("Current details")
+    print("---------------")
+    print(vendor)
+    print("Enter new information (Press ENTER to keep the information the same")
+
+    new_vegan = input("Vegan hotdogs: ")
+    new_meat = input("Meat hotdogs: ")
+    new_onions = input("Onions (kg): ")
+    new_ketchup = input("Ketchup (litres): ")
+
+    try:
+        if new_vegan != "":
+            vendor["vegan"] = int(new_vegan)
+        if new_meat != "":
+            vendor["meat"] = int(new_meat)
+        if new_onions != "":
+            vendor["onions"] = float(new_onions)
+        if new_ketchup != "":
+            vendor["ketchup" = int(new_ketchup)
+    except:
+        print("Invalid input. Changes have been cancelled")
+        return
+
+    check = [
+        vendor{"id"],
+        vendor["name"],
+        vendor["date"],
+        str(vendor["vegan"]),
+        str(vendor["meat"]),
+        str(vendor["onions"]),
+        str(vendor["ketchup"]),
+        ]
+
+    if validation(check):
+        print("Update successful.")
+        data[found] = vendor
+    else:
+        print("Update rejected (data failed validation. No changes saved.")
+
+def save_file(data, file_name = "Hotdogs.txt"):
+    with open(filename, "w") as file:
+        for o in data:
+            line = (
+                f"{v['id']},{v['name']},{v['date']}"
+                f"{v['vegan']},{v['meat']},{v['onions']},{v['ketchup']}\n"
+                )
+            file.write(line)
+
+    print("Data saved to file.")
+    
 
 
 def quick_sort(data_list):
@@ -187,6 +253,10 @@ if vendor_list:
         print("2. Search for a vendor")
         print("3. Analyse")
         print("4. Exit")
+        print("5. Edit vendor")
+        print("6. Save changes")
+        
+        
 
         user_choice = input("Choose a option: ")
 
@@ -224,7 +294,7 @@ if vendor_list:
 
             #Binary Search
             begin = time.perf_counter()
-            index = binarySearch(quick_data, target)
+            binarySearch(quick_data, target)
             timeC = time.perf_counter() - begin
 
             print("Search Efficiency")
@@ -232,8 +302,6 @@ if vendor_list:
             print(f"Linear search (unsorted): {timeA:.6f} seconds.")
             print(f"Linear search (sorted): {timeB:.6f} seconds.")
             print(f"Binary search: {timeC:.6f} seconds.")
-            if timeC < timeA and timeC < timeB:
-                print("Binary search is the fastest search.")
 
         elif user_choice == "3":
             results = analysing_data(vendor_list)
@@ -242,6 +310,13 @@ if vendor_list:
         elif user_choice == "4":
             print("Exiting the program")
             break
+
+        elif user_choice == "5":
+            edit_vendor_info(vendor_list)
+
+        elif user_choice == "6":
+            save_info(vendor_list)
+            
         else:
             print("Invalid option, try again.")
 
@@ -269,4 +344,5 @@ if vendor_list:
 ##    else:
 ##        print("Vendor not found in the list")
 ##
+
 
