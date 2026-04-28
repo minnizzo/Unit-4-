@@ -290,7 +290,7 @@ if vendor_list:
 
             #Quick Sort
             begin = time.perf_counter()
-            quick_data = quick_sort(quick_data)
+            quick_data = quick_sort(vendor_list)
             quick_time = time.perf_counter() - begin
 
             print(f"Bubble Sort: {bubble_time:.6f} seconds.")
@@ -305,15 +305,47 @@ if vendor_list:
             linearSearchUnsorted(vendor_list, target)
             timeA = time.perf_counter() - begin
 
-            #Linear Search (Sorted)
-            begin = time.perf_counter()
-            linearSearchSorted(quick_data, target)
-            timeB = time.perf_counter() - begin
+            if result:
+                print("\nVendor found (Unsorted search):")
+                print("---------------------------------")
+                print(f"ID: {result['id']}")
+                print(f"Name: {result['name']}")
+                print(f"Date: {result['date']}")
+                print(f"Vegan: {result['vegan']}")
+                print(f"Meat: {result['meat']}")
+                print(f"Onions: {result['onions']}")
+                print(f"Ketchup: {result['ketchup']}")
 
-            #Binary Search
-            begin = time.perf_counter()
-            binarySearch(quick_data, target)
-            timeC = time.perf_counter() - begin
+            else:
+                print("\nVendor not found.")
+
+            response = input("Do you want to see the sorted results? (yes/no): ")
+
+            if response == "yes":
+                sorted_list = quick_sort(vendor_list)
+
+                #Linear Search (Sorted)
+                begin = time.perf_counter()
+                linearSearchSorted(quick_data, target)
+                timeB = time.perf_counter() - begin
+
+                #Binary Search
+                begin = time.perf_counter()
+                binarySearch(quick_data, target)
+                timeC = time.perf_counter() - begin
+
+                print("\nSorted search results:")
+                print("------------------------")
+
+                if matches:
+                    for m in matches:
+                        print(f"{m['name']} , Meat: {m['meat']}, Vegan: {m['vegan']}")
+                else:
+                    print("No matches found.")
+
+            else:
+                timeB = 0
+                timeC = 0
 
             print("Search Efficiency")
             print("-----------------")
@@ -362,4 +394,3 @@ if vendor_list:
 ##    else:
 ##        print("Vendor not found in the list")
 ##
-
