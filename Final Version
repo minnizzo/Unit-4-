@@ -1,0 +1,403 @@
+import time
+
+#Creating an empty list to sore vendor data.
+hotdogs = []
+
+def validation(columns):
+    #Checks if the data from the file meet the validation rules. Returns True if it is valid and False if it is invalid.
+    try:
+        vendor_id = columns[0]
+        name = columns[1]
+        date = columns[2]
+        vegan = int(columns[3])
+        meat = int(columns[4])
+        onions = float(columns[5])
+        ketchup = int(columns[6])
+
+        #ID format: Has to be 6 characters long and start with two capital letters, includes an underscore and has three digits (e.g: NC_127)
+        if not (len(vendor_id) == 6 and vendor_id[:2].isupper() and vendor_id[2] == "_" and vendor_id[3:].isdigit()):
+            return False
+        
+        #Name length: Has to be between 2 and 25 characters long.
+        if not(2 <= len(name) <= 25):
+            return False
+        
+        #Date format + week: The date has to be exactly 6 digits. 
+        if not(len(date) == 6 and date.isdigit()):
+            return False
+        
+        #Multiples of 10: Hotdogs have to be divisable by 10.
+        if vegan % 10 != 0 or meat % 10 != 0:
+            return False
+        
+        #Onions: It checks if the onions are in the correct format.
+        if onions * 2 != int(onions * 2):
+            return False
+        
+        #Ketchup: Has to be between 1 and 4 litres.
+        if not (1 <= ketchup <= 4):
+            return False
+
+        return True #If it is valid
+    except:
+        return False #If the data type is wrong. e.g: text where a number should be.
+        
+
+
+def data_loading(hotdogs_file):
+    #Opens the text file ("Hotdogs.txt") and adds valid records into a list of dictionaries
+    
+    vendor_list = []
+    
+    try:
+        #Using a with function to make sure the file closes automatically.
+        with open(hotdogs_file,"r") as file:
+            for line in file:
+                #Removes blank spaces and splits the values which have a comma in between.
+                columns = line.strip().split(",")
+                columns = [item.strip() for item in columns]
+
+                
+                #If the row has 7 items and passes the validation
+                if len(columns) == 7 and validation(columns):
+                    try:
+                        records = {
+                            "id": columns[0],
+                            "name": columns[1],
+                            "date": columns[2],
+                            "vegan": int(columns[3]),
+                            "meat": int(columns[4]),
+                            "onions": float(columns[5]),
+                            "ketchup": int(columns[6])
+                        }
+                        vendor_list.append(records)
+                    except:
+                        print("Invalid record.",columns)
+                else:
+                    print("Invalid record",columns)
+            
+            print("Loaded", len(vendor_list), "vendors.")
+            return vendor_list
+        
+    except FileNotFoundError:
+        print("Error: 'Hotdogs.txt' not found")
+        return []
+    
+
+def save_result(data):
+    #Saves the results of the data analysis to a new text file ("analysis.txt")
+    
+    with open("analysis.txt","w") as file:
+        file.write("Hotdog Vendor Analysis\n")
+        file.write("----------------------\n")
+        file.write(f"Most productive {data['most']['name']}\n")
+        file.write(f"Total vegan: {data['vegan']}\n")
+        file.write(f"Total meat: {data['meat']}\n")
+        file.write(f"Least ketchup: {data['least']['name']}\n")
+    print("Results saved to 'analysis.txt'")
+
+def edit_vendor_info(data):
+    #Allows the user to find a vendor and update their data.
+    
+    name = input("Enter vendor name to edit : ")
+    
+    #Finds all the records that match to the name.
+    matches = []
+    for i in range(len(data)):
+        if data[i]["name"].lower() == name:
+            matches.append(i)
+            
+    if not matches:
+        print("Error: Vendor not found.")
+        return
+
+    #If there is more than one match found for that name, the user can choose which record they want to change.
+    if len(matches) > 1:
+        print(f"Multiple records found for '{data[matches[0]]['name']}':")
+
+        count = 1
+        for index in matches:
+            record = data[index]
+            print(str(count) + ". Date: " + record['date'] + " Meat: " + str(record['meat']))
+            count = count + 1
+
+            try:
+                choice = int(input("Enter the number of the record you want to edit: "))
+                found = matches[choice - 1]
+            except:
+                print("Invalid selection.")
+                return
+    else:
+        found = matches[0]
+    
+    vendor = data[found]
+
+    print("\nCurrent details")
+    print("---------------")
+    print(vendor)
+    print("Enter new information (Press ENTER to keep the information the same")
+
+    #Get the user updated data.
+    new_vegan = input("Vegan hotdogs: ")
+    new_meat = input("Meat hotdogs: ")
+    new_onions = input("Onions (kg): ")
+    new_ketchup = input("Ketchup (litres): ")
+
+    #Use a temporary copy to validate the changes before saving it to the file.
+    temp_vendor = vendor.copy()
+    
+
+    try:
+        if new_vegan != "":
+            temp_vendor["vegan"] = int(new_vegan)
+        if new_meat != "":
+            temp_vendor["meat"] = int(new_meat)
+        if new_onions != "":
+            temp_vendor["onions"] = float(new_onions)
+        if new_ketchup != "":
+            temp_vendor["ketchup"] = int(new_ketchup)
+    except:
+        print("Invalid input. Changes have been cancelled")
+        return
+
+    #Putting the changes into a list to prepare the data for a validation check.
+    check = [
+        temp_vendor["id"],
+        temp_vendor["name"],
+        temp_vendor["date"],
+        str(temp_vendor["vegan"]),
+        str(temp_vendor["meat"]),
+        str(temp_vendor["onions"]),
+        str(temp_vendor["ketchup"]),
+        ]
+
+    if validation(check):
+        print("Update successful.")
+        data[found] = temp_vendor
+    else:
+        print("Update rejected (data failed validation.) No changes saved.")
+
+def save_file(data, file_name = "Hotdogs.txt"):
+    #Overwrites the main data file with the updated vendor list
+    
+    with open(file_name, "w") as file:
+        for o in data:
+            line = (
+                f"{o['id']},{o['name']},{o['date']},{o['vegan']},{o['meat']},{o['onions']},{o['ketchup']}\n"
+                )
+            file.write(line)
+    print("Data saved to file.")
+    
+
+
+def quick_sort(data_list):
+    #A divide and conquer sorting algorithm
+    
+    if len(data_list) <= 1:
+        return data_list
+    
+    pivot = data_list[0]
+    #Splits the list into items smaller than the pivot and items larger.
+    left = [x for x in data_list[1:] if x['name'].lower()< pivot['name'].lower()]
+    right = [x for x in data_list[1:] if x['name'].lower() >= pivot['name'].lower()]
+    return quick_sort(left) + [pivot] + quick_sort(right)
+
+def bubble_sort(data):
+    #A simple sorting algorithm.
+    
+    x = len(data)
+
+    for i in range(x):
+        for m in range(0,x - i - 1):
+
+            if data[m]["name"].lower() > data[m+1]["name"].lower():
+               data[m], data[m+1] = data [m+1], data[m]
+
+def binarySearch(data_list, x):
+    #Fast search for sorted lists. Halves the search area.
+    low = 0
+    high = len(data_list) - 1
+    x = x.lower()
+    
+    while low <= high:
+        mid = low + (high - low) // 2
+        current_name = data_list[mid]["name"].lower()
+        
+        if current_name == x:
+            return mid
+        elif current_name < x:
+            low = mid + 1
+        else:
+            high = mid - 1
+            
+    return -1
+
+
+
+#linear search (unsorted)
+
+def linearSearchUnsorted (data, search_name):
+    #Checks every single item one by one. This specifically works on unsorted data.
+    
+    for i in range(len(data)):
+        #Checks if the name is in the list
+        if data[i]["name"].lower() == search_name.lower():
+            #
+            return i, data[i]
+    
+    return -1, None
+    #This is for the loop if it finishes without finding anything.
+
+def linearSearchSorted(data, search_name):
+    #This version of the linear search stops early if it passes where the name should.
+    search_name = search_name.strip().lower()
+    matches = []
+    for i in range(len(data)):
+        name1 = data[i]["name"].lower()
+        if name1 == search_name:
+            matches.append(data[i])
+        elif name1 > search_name:
+            break
+    return matches
+
+def analysing_data(data):
+    #Calculates the totals and find the best/worst vendors.
+    
+    most = data[0]
+    least_ketchup_used = data[0]
+    total_vegan = 0
+    total_meat = 0
+
+    for b in data:
+        #Checks for the highest total sales.
+        if b["vegan"] + b["meat"] > most["vegan"] + most["meat"]:
+            most = b
+        #Checks for the vendor who uses the least amount of ketchup
+        if b["ketchup"] < least_ketchup_used["ketchup"]:
+            least_ketchup_used = b
+
+        total_vegan += b["vegan"]
+        total_meat += b["meat"]
+
+    print("Analysis\n")
+    print("--------\n")
+    print("")
+    print("Most productive:", most["name"])
+    print("Total vegan:", total_vegan)
+    print("Total meat:", total_meat)
+    print("Least ketchup:", least_ketchup_used["name"])
+
+    return {
+        "most": most,
+        "vegan": total_vegan,
+        "meat": total_meat,
+        "least": least_ketchup_used
+        }
+
+#The Main Program
+    
+vendor_list = data_loading("Hotdogs.txt")
+
+if vendor_list:
+    while True:
+        print("Menu")
+        print("----")
+        print("1. Sort and compare")
+        print("2. Search for a vendor")
+        print("3. Analyse")
+        print("4. Save changes")
+        print("5. Edit vendor")
+        print("6. Exit")
+        
+        
+
+        user_choice = input("Choose a option: ")
+
+        if user_choice == "1":
+            #Comparing the bubble and quick sort
+            bubble_data = vendor_list[:]
+            quick_data = vendor_list[:]
+
+            #Bubble Sort
+            begin = time.perf_counter()
+            bubble_sort(bubble_data)
+            bubble_time = time.perf_counter() - begin
+
+            #Quick Sort
+            begin = time.perf_counter()
+            quick_data = quick_sort(vendor_list)
+            quick_time = time.perf_counter() - begin
+
+            print(f"Bubble Sort: {bubble_time:.6f} seconds.")
+            print(f"Quick Sort: {quick_time:.6f} seconds.")
+
+        elif user_choice == "2":
+            target = input("Enter vendor name to search for: ").lower()
+            
+            #Creating an empty list to store any matches we find
+            matches = []
+            for record in vendor_list:
+                if record["name"].lower() == target:
+                    matches.append(record)
+
+            #Check if it found anything
+            if len(matches) > 0:
+                print("\nRecords found for:", target.title())
+                print("------------------------------------")
+                
+                #Loop through the matches and outputs them.
+                for r in matches:
+                    print("Date:", r["date"], "| ID:", r["id"], "| Meat:", r["meat"], "| Vegan:", r["vegan"])
+                
+                #Comparing the efficiencies.
+                check_performance = input("\nShow search efficiency? (yes/no): ").lower()
+                if check_performance == "yes":
+                    #A sorted list for the binary search to take place.
+                    sorted_list = quick_sort(vendor_list)
+
+                    #Calculating the linear search (unsorted).
+                    start = time.perf_counter()
+                    linearSearchUnsorted(vendor_list, target)
+                    time_unsorted = time.perf_counter() - start
+
+                    #Calculating linear search (Sorted)
+                    begin = time.perf_counter()
+                    linearSearchSorted(sorted_list, target)
+                    timeB = time.perf_counter() - begin
+
+                    #Calculating the binary search
+                    start = time.perf_counter()
+                    binarySearch(sorted_list, target)
+                    time_binary = time.perf_counter() - start
+
+                    print("Search Efficiency")
+                    print("-----------------")
+                    print(f"Linear search (unsorted): {time_unsorted:.6f} seconds.")
+                    print(f"Linear search (sorted): {timeB:.6f} seconds.")
+                    print(f"Binary search: {time_binary:.6f} seconds.")
+                    
+                else:
+                    print("No vendor found.")
+                
+    
+        elif user_choice == "3":
+            results = analysing_data(vendor_list)
+            save_result(results)
+
+        elif user_choice == "4":
+            save_file(vendor_list)
+
+        elif user_choice == "5":
+            edit_vendor_info(vendor_list)
+
+        elif user_choice == "6":
+            print("The program has ended.")
+            break
+            
+        else:
+            print("Invalid option, try again.")
+
+
+
+    
+
