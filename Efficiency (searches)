@@ -1,0 +1,25 @@
+import time
+#Comparing searches
+    target = input("Enter vendor name to search for: ")
+
+    #Linear Search(Unsorted)
+    begin = time.perf_counter()
+    linearSearchUnsorted(vendor_list, target)
+    timeA = time.perf_counter() - begin
+
+    #Linear Search (Sorted)
+    begin = time.perf_counter()
+    linearSearchSorted(quick_data, target)
+    timeB = time.perf_counter() - begin
+
+    #Binary Search
+    begin = time.perf_counter()
+    binarySearch(quick_data, target)
+    timeC = time.perf_counter() - begin
+
+    print("Search Efficiency")
+    print("-----------------")
+    print(f"Linear search (unsorted): {timeA:.6f} seconds.")
+    print(f"Linear search (sorted): {timeB:.6f} seconds.")
+    print(f"Binary search: {timeC:.6f} seconds.")
+

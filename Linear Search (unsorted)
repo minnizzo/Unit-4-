@@ -1,0 +1,12 @@
+#linear search (unsorted)
+
+def linearSearchUnsorted (data, search_name):
+    for i in range(len(data)):
+        #Checks if the name is in the list
+        if data[i]["name"].lower() == search_name.lower():
+            #
+            return i, data[i]
+    
+    return -1, None
+    #This is for the loop if it finishes without finding anything.
+

@@ -1,0 +1,9 @@
+def quick_sort(data_list):
+    if len(data_list) <= 1:
+        return data_list
+    
+    pivot = data_list[0]
+    
+    left = [x for x in data_list[1:] if x['name'].lower()< pivot['name'].lower()]
+    right = [x for x in data_list[1:] if x['name'].lower() >= pivot['name'].lower()]
+    return quick_sort(left) + [pivot] + quick_sort(right)

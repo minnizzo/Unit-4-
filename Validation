@@ -1,0 +1,32 @@
+def validation(columns):
+    try:
+        vendor_id = columns[0]
+        name = columns[1]
+        date = columns[2]
+        vegan = int(columns[3])
+        meat = int(columns[4])
+        onions = float(columns[5])
+        ketchup = int(columns[6])
+
+        #ID format
+        if not (len(vendor_id) == 6 and vendor_id[:2].isupper() and vendor_id[2] == "_" and vendor_id[3:].isdigit()):
+            return False
+        #Name length
+        if not(2 <= len(name) <= 25):
+            return False
+        #Date format + week
+        if not(len(date) == 6 and date.isdigit()):
+            return False
+        #Multiples of 10
+        if vegan % 10 != 0 or meat % 10 != 0:
+            return False
+        #Onions
+        if onions * 2 != int(onions * 2):
+            return False
+        #Ketchup
+        if not (1 <= ketchup <= 4):
+            return False
+
+        return True
+    except:
+        return False

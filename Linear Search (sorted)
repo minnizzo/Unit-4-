@@ -1,0 +1,10 @@
+def linearSearchSorted(data, search_name):
+    search_name = search_name.strip().lower()
+    matches = []
+    for i in range(len(data)):
+        name1 = data[i]["name"].lower()
+        if name1 == search_name:
+            matches.append(data[i])
+        elif name1 > search_name:
+            break
+    return matches

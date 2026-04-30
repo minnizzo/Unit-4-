@@ -1,0 +1,17 @@
+def binarySearch(data_list, x):
+    low = 0
+    high = len(data_list) - 1
+    x = x.lower()
+    
+    while low <= high:
+        mid = low + (high - low) // 2
+        current_name = data_list[mid]["name"].lower()
+        
+        if current_name == x:
+            return mid
+        elif current_name < x:
+            low = mid + 1
+        else:
+            high = mid - 1
+            
+    return -1
