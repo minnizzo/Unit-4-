@@ -1,6 +1,6 @@
 import time
 
-#Creating an empty list to sore vendor data.
+#Creating an empty list to store vendor data.
 hotdogs = []
 
 def validation(columns):
